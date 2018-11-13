@@ -12,8 +12,6 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
     if (err) throw err;
     printProducts();
-    // start();
-    connection.end();
 });
 
 function printProducts() {
@@ -23,26 +21,44 @@ function printProducts() {
         for (var i = 0; i < res.length; i++) {
             console.log("\n" + res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | $" + res[i].price + " | " + res[i].stock_quantity + " in stock");
         }
+        // prompt();
+        buy();
+        connection.end();
+
     });
 
-// function start() {
-//     inquirer
-//       .prompt({
-//         name: "postOrBid",
-//         type: "rawlist",
-//         message: "Would you like to [POST] an auction or [BID] on an auction?",
-//         choices: ["POST", "BID"]
-//       })
-//       .then(function(answer) {
-//         // based on their answer, either call the bid or the post functions
-//         if (answer.postOrBid.toUpperCase() === "POST") {
-//           postAuction();
-//         }
-//         else {
-//           bidAuction();
-//         }
-//       });
-//   }
-// }
 
+function buy() {
+    inquirer
+      .prompt([
+          {
+            name: "itemId",
+            type: "input",
+            message: "Enter the ID number of the item you'd like to purchase.",
+            validate: function(value) {
+                if (isNaN(value) === false) {
+                    return true;
+                }
+                return false;
+            }
+          },
+          {
+            name: "quantity",
+            type: "input",
+            message: "How many would you like to buy?",
+            validate: function(value) {
+                if (isNaN(value) === false) {
+                    return true;
+                }
+                return false;
+            }
+          }
+      ]).then(function(input) {
+        //   console.log(input.itemId + ", " + input.quantity);
+          var item = input.itemId;
+          var quantity = input.quantity;
+          
+      })
+    }
 }
+
