@@ -1,8 +1,8 @@
 {
-  "name": "greatbay",
+  "name": "bamazon",
   "version": "1.0.0",
-  "description": "",
-  "main": "gb.js",
+  "description": "amazon style storefront",
+  "main": "bamazonCustomer.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
