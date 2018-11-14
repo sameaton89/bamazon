@@ -14,7 +14,7 @@ connection.connect(function(err) {
     printProducts();
 });
 
-function printProducts() {
+var printProducts = function(res) {
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
         console.log("\nWelcome to Bamazon! Below you'll find our extensive eleven item inventory.\n\n=========================================================================");
@@ -25,7 +25,10 @@ function printProducts() {
         // connection.end();
     });
 
-function buy() {
+
+
+
+var buy = function(res) {
     inquirer
       .prompt([
           {
@@ -54,21 +57,37 @@ function buy() {
         //   console.log(input.itemId + ", " + input.quantity);
           var item = input.itemId;
           var quantity = input.quantity;
-          
+
+
+    
+
           connection.query("SELECT * FROM products WHERE?", {item_id: item}, function(err, res) {
               if (err) throw err;
                 console.log(res);
               if (res.length === 0) {
-                  console.log("Invalid ID. Please enter a valid ID.");
-                  printProducts();
+                var invalidId = function() {
+                    console.log("Invalid ID. Please enter a valid ID.");
+                    buy();
+                }
+            invalidId();            
               } else {
                   if (quantity <= res[0].stock_quantity) {
-                      console.log("The item is in stock! Placing order.");
-                  } else {
-                      console.log("Sorry, we don't have enough of that item left! Enter a number less than or equal to " + res[0].stock_quantity + ".")
-                  }
+                    var completePurchase = function() {
+                        console.log("The item is in stock! Placing order. Would you like to buy anything else?");
+                    
+                    }
+                    completePurchase();
 
+                      
+                  } else {
+                    function notEnough() {
+                        console.log("Sorry, we don't have enough of that item left! Enter a number less than or equal to " + res[0].stock_quantity + ".");
+                        buy();
+                    }
+                    notEnough();
+                  }
               }
+
           })
           
       })
