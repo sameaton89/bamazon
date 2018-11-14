@@ -21,12 +21,9 @@ function printProducts() {
         for (var i = 0; i < res.length; i++) {
             console.log("\n" + res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | $" + res[i].price + " | " + res[i].stock_quantity + " in stock");
         }
-        // prompt();
         buy();
-        connection.end();
-
+        // connection.end();
     });
-
 
 function buy() {
     inquirer
@@ -57,6 +54,20 @@ function buy() {
         //   console.log(input.itemId + ", " + input.quantity);
           var item = input.itemId;
           var quantity = input.quantity;
+          
+          connection.query("SELECT * FROM products WHERE ?", [item], function(err, res) {
+              if (err) throw err;
+
+              if (res.length === 0) {
+                  console.log("Invalid ID. Please enter a valid ID.");
+                  printProducts();
+              } else {
+                  var productData = res[0];
+                  if (quantity <= productData.stock_quantity) {
+                      console.log("The item is in stock! Placing order.")
+                  }
+              }
+          })
           
       })
     }
