@@ -25,8 +25,22 @@ var printProducts = function(res) {
         // connection.end();
     });
 
-
-
+function afterPurchase () {
+        inquirer
+        .prompt({
+            name: "continueShop",
+            type: "rawlist",
+            message: "Would you like to keep shopping?",
+            choices: ["YES", "NO"]
+        }).then(function(answer) {
+            if (answer.continueShop.toUpperCase() === "YES") {
+                printProducts();
+            }
+            else {
+                console.log("OK! Thanks for shopping! Click control + c to quit Bamazon.")
+            }
+        })
+    }
 
 var buy = function(res) {
     inquirer
@@ -56,14 +70,11 @@ var buy = function(res) {
       ]).then(function(input) {
         //   console.log(input.itemId + ", " + input.quantity);
           var item = input.itemId;
-          var quantity = input.quantity;
-
-
-    
+          var quantity = input.quantity; 
 
           connection.query("SELECT * FROM products WHERE?", {item_id: item}, function(err, res) {
               if (err) throw err;
-                console.log(res);
+                // console.log(res);
               if (res.length === 0) {
                 var invalidId = function() {
                     console.log("Invalid ID. Please enter a valid ID.");
@@ -75,15 +86,15 @@ var buy = function(res) {
                     var completePurchase = function() {
                         function minus() {
                         connection.query("UPDATE products SET stock_quantity='" + (res[0].stock_quantity - quantity) + "' WHERE item_id='" + item + "'");
+
                     }
-                        console.log("The item is in stock! Placing order. Would you like to buy anything else?");
+                        console.log("The item is in stock! Placing order.");
                         minus();
-                        console.log(res[0].stock_quantity - quantity)
-                    
+                        // console.log(res[0].stock_quantity - quantity)
+                    afterPurchase();
                     }
                     completePurchase();
-
-                      
+                            
                   } else {
                     function notEnough() {
                         console.log("Sorry, we don't have enough of that item left! Enter a number less than or equal to " + res[0].stock_quantity + ".");
@@ -92,9 +103,7 @@ var buy = function(res) {
                     notEnough();
                   }
               }
-
-          })
-          
+          })    
       })
     }
 }
