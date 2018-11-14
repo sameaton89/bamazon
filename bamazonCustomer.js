@@ -29,7 +29,7 @@ function afterPurchase () {
         inquirer
         .prompt({
             name: "continueShop",
-            type: "rawlist",
+            type: "list",
             message: "Would you like to keep shopping?",
             choices: ["YES", "NO"]
         }).then(function(answer) {
@@ -38,6 +38,7 @@ function afterPurchase () {
             }
             else {
                 console.log("OK! Thanks for shopping! Click control + c to quit Bamazon.")
+                connection.end();
             }
         })
     }
