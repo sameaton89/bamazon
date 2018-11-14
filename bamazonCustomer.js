@@ -55,17 +55,19 @@ function buy() {
           var item = input.itemId;
           var quantity = input.quantity;
           
-          connection.query("SELECT * FROM products WHERE ?", [item], function(err, res) {
+          connection.query("SELECT * FROM products WHERE?", {item_id: item}, function(err, res) {
               if (err) throw err;
-
+                console.log(res);
               if (res.length === 0) {
                   console.log("Invalid ID. Please enter a valid ID.");
                   printProducts();
               } else {
-                  var productData = res[0];
-                  if (quantity <= productData.stock_quantity) {
-                      console.log("The item is in stock! Placing order.")
+                  if (quantity <= res[0].stock_quantity) {
+                      console.log("The item is in stock! Placing order.");
+                  } else {
+                      console.log("Sorry, we don't have enough of that item left! Enter a number less than or equal to " + res[0].stock_quantity + ".")
                   }
+
               }
           })
           
