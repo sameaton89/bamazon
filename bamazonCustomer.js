@@ -73,7 +73,12 @@ var buy = function(res) {
               } else {
                   if (quantity <= res[0].stock_quantity) {
                     var completePurchase = function() {
+                        function minus() {
+                        connection.query("UPDATE products SET stock_quantity='" + (res[0].stock_quantity - quantity) + "' WHERE item_id='" + item + "'");
+                    }
                         console.log("The item is in stock! Placing order. Would you like to buy anything else?");
+                        minus();
+                        console.log(res[0].stock_quantity - quantity)
                     
                     }
                     completePurchase();
